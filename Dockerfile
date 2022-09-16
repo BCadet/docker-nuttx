@@ -4,20 +4,17 @@ LABEL maintainer="BCadet <https://github.com/BCadet>"
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    gosu \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+    gosu
+
+RUN useradd --create-home builder
 
 # setup entrypoint
-RUN wget https://gist.githubusercontent.com/BCadet/372702916a20b141cb78ea889e3dae59/raw/8ede39418161ea586ff4802f4fa8446f577dbdb8/container-entrypoint
-
-RUN apt-get remove --purge -y wget
+ADD https://gist.githubusercontent.com/BCadet/372702916a20b141cb78ea889e3dae59/raw/73822ba555bfbd75ab7c09c90d463585535e5a0e/container-entrypoint /container-entrypoint
 
 RUN chmod +x /container-entrypoint
 ENTRYPOINT [ "/container-entrypoint" ]
 
-RUN apt-get update \
-    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y \
     bison \
     flex \
     gettext \
